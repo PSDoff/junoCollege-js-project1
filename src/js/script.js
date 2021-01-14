@@ -1,4 +1,7 @@
 const app = {};
+const modal = {
+    el: document.getElementById("dice-roll-modal")
+}
 
 // I recommend collapsing this object
 // No really. You just like... keep scrolling...
@@ -7,31 +10,37 @@ const app = {};
 app.character = {
     abilities: {
         str: {
+            displayName: 'Strength',
             score: 10,
             mod: 0,
             temp: 0
         },
         dex: {
+            displayName: 'Dexterity',
             score: 10,
             mod: 0,
             temp: 0
         },
         con: {
+            displayName: 'Constitution',
             score: 10,
             mod: 0,
             temp: 0
         },
         int: {
+            displayName: 'Intelligence',
             score: 10,
             mod: 0,
             temp: 0
         },
         wis: {
+            displayName: 'Wisdom',
             score: 10,
             mod: 0,
             temp: 0
         },
         cha: {
+            displayName: 'Charisma',
             score: 10,
             mod: 0,
             temp: 0
@@ -299,43 +308,45 @@ app.calculateSkillTotals = (skillId) => {
 // TODO:    I think there's a better way to do this template. Help?
 app.createSkillItem = (skillObj) => {
     const skillContainer = $('#skills > div');
-    let skillId = skillObj.displayName.replace(/\s+/g, '_').replace(/[{()}]/g, '').toLowerCase();
-    let skillItemTemplate = `<div class="col-span-2 text-left">
-    <input type="checkbox" data-class-skill="${skillId}" name="skill-${skillId}" />
-    <label for="skill-${skillId}" data-roll-it="skill" data-skill-id="${skillId}">${skillObj.displayName}</label>
-    </div>
-    <div class="col-span-1 text-center">
-    <label for="skill-${skillId}-total" class="sr-only"></label>
-    <input id="skill-${skillId}-total" type="text" class="border py-2 px-3 text-grey-darkest" disabled>
-    </div>
-    <div class="col-span-1 text-center">
-    <span>=</span>
-    </div>
-    <div class="col-span-1 text-center">
-    <label for="skill-${skillId}-ability" class="sr-only"></label>
-    <input id="skill-${skillId}-ability" data-ability-mod="${skillObj.modStat}" data-state-map="character.skills.${skillId}.abilityMod" type="text" class="border py-2 px-3 text-grey-darkest" disabled>
-    </div>
-    <div class="col-span-1 text-center">
-    <span>+</span>
-    </div>
-    <div class="col-span-1 text-center">
-    <label for="skill-${skillId}-ranks" class="sr-only"></label>
-    <input id="skill-${skillId}-ranks" type="text" data-state-map="character.skills.${skillId}.ranks" class="border py-2 px-3 text-grey-darkest">
-    </div>
-    <div class="col-span-1 text-center">
-    <span>+</span>
-    </div>
-    <div class="col-span-1 text-center">
-    <label for="skill-${skillId}-misc" class="sr-only"></label>
-    <input id="skill-${skillId}-misc" type="text" data-state-map="character.skills.${skillId}.misc" class="border py-2 px-3 text-grey-darkest">
-    </div>
-    <div class="col-span-1 text-center">
-    <span>+</span>
-    </div>
-    <div class="col-span-1 text-center">
-    <label for="skill-${skillId}-temp" class="sr-only"></label>
-    <input id="skill-${skillId}-temp" type="text" data-state-map="character.skills.${skillId}.temp" class="border py-2 px-3 text-grey-darkest">
-    </div>`;
+    const skillId = skillObj.displayName.replace(/\s+/g, '_').replace(/[{()}]/g, '').toLowerCase();
+    const skillItemTemplate = `
+        <div class="col-span-2 text-left">
+            <input type="checkbox" data-class-skill="${skillId}" name="skill-${skillId}" />
+            <label for="skill-${skillId}" data-roll-it="skill" data-skill-id="${skillId}">${skillObj.displayName}</label>
+        </div>
+        <div class="col-span-1 text-center">
+            <label for="skill-${skillId}-total" class="sr-only"></label>
+            <input id="skill-${skillId}-total" type="text" class="border py-2 px-3 text-grey-darkest" disabled>
+        </div>
+        <div class="col-span-1 text-center">
+            <span>=</span>
+        </div>
+        <div class="col-span-1 text-center">
+            <label for="skill-${skillId}-ability" class="sr-only"></label>
+            <input id="skill-${skillId}-ability" data-ability-mod="${skillObj.modStat}" data-state-map="character.skills.${skillId}.abilityMod" type="text" class="border py-2 px-3 text-grey-darkest" disabled>
+        </div>
+        <div class="col-span-1 text-center">
+            <span>+</span>
+        </div>
+        <div class="col-span-1 text-center">
+            <label for="skill-${skillId}-ranks" class="sr-only"></label>
+            <input id="skill-${skillId}-ranks" type="text" data-state-map="character.skills.${skillId}.ranks" class="border py-2 px-3 text-grey-darkest">
+        </div>
+        <div class="col-span-1 text-center">
+            <span>+</span>
+        </div>
+        <div class="col-span-1 text-center">
+            <label for="skill-${skillId}-misc" class="sr-only"></label>
+            <input id="skill-${skillId}-misc" type="text" data-state-map="character.skills.${skillId}.misc" class="border py-2 px-3 text-grey-darkest">
+        </div>
+        <div class="col-span-1 text-center">
+            <span>+</span>
+        </div>
+        <div class="col-span-1 text-center">
+            <label for="skill-${skillId}-temp" class="sr-only"></label>
+            <input id="skill-${skillId}-temp" type="text" data-state-map="character.skills.${skillId}.temp" class="border py-2 px-3 text-grey-darkest">
+        </div>
+    `;
     
     skillContainer.append(skillItemTemplate);
 }
@@ -422,58 +433,92 @@ app.parsePath = (obj, path, val) => {
 
 app.rollIt = (item) => {
     const $item = $(item);
+    const diceRollModal = $('#dice-roll-modal');
+    let dieRoll = app.superRandomizer2ElectricBoogaloo(1, 20);
+    // wanna force a crit fail? Make some epic magic happen? Do it here:
+    // dieRoll = 1;
+    // dieRoll = 20;
+
     if ($item.data('roll-it') === 'skill') {
         const skillId = $item.data('skill-id');
         const abilityModifierType = app.character.skills[skillId].modStat;
-        const diceRollModal = $('#dice-roll-modal');
+        const isClassSkill = app.character.skills[skillId].isClassSkill;
 
         // Variables to store values to be added
         const abilityMod = app.character.abilities[abilityModifierType].mod || 0;
         const ranksMod = app.character.skills[skillId].ranks || 0;
         const miscMod = app.character.skills[skillId].misc || 0;
         const tempMod = app.character.skills[skillId].temp || 0;
-        const classSkillMod = app.character.skills[skillId].isClassSkill ? 3 : 0;
-        const dieRoll = app.superRandomizer2ElectricBoogaloo(1, 20);
+        const classSkillMod = isClassSkill ? 3 : 0;
         const total = abilityMod + ranksMod + miscMod + tempMod + classSkillMod + dieRoll;
 
         // UI updates
         diceRollModal.find('h2[data-property-rolled]').html(app.character.skills[skillId].displayName);
-        console.log({dieRoll});
-        console.log({total});
-
-        modal.el.style.display = "block";
+        diceRollModal.find('p[data-roll-details]').html(`<strong>${total}</strong> <br/>
+                                                            Roll: ${dieRoll} <br/>
+                                                            ${abilityModifierType.toUpperCase()} Mod: ${abilityMod} <br/>
+                                                            Ranks: ${ranksMod} <br/>
+                                                            Misc: ${miscMod} <br/>
+                                                            Temp: ${tempMod} <br/>
+                                                            ${isClassSkill ? 'Class Skill: 3 <br/>' : ''}`);
     } else if ($item.data('roll-it') === 'ability') {
-        console.log('is ability');
+        const abilityId = $(item).data('ability-id');
+        const abilityMod = app.character.abilities[abilityId].mod;
+        const total = dieRoll + abilityMod;
+
+        // UI updates
+        diceRollModal.find('h2[data-property-rolled]').html(app.character.abilities[abilityId].displayName);
+        diceRollModal.find('p[data-roll-details]').html(`<strong>${total}</strong> <br/>
+                                                            Roll: ${dieRoll} <br/>
+                                                            Modifier: ${abilityMod} <br/>`);
     }
-    console.log($item);
+
+    modal.el.style.display = "block";
+
+    if (dieRoll === 20) {
+        diceRollModal.find('.modal-header').removeClass('fail');
+        diceRollModal.find('.modal-header').addClass('success');
+    } else if (dieRoll === 1) {
+        diceRollModal.find('.modal-header').removeClass('success');
+        diceRollModal.find('.modal-header').addClass('fail');
+    } else {
+        diceRollModal.find('.modal-header').removeClass('success');
+        diceRollModal.find('.modal-header').removeClass('fail');
+    }
 }
 
 app.superRandomizer2ElectricBoogaloo = (min = 1, max = 100) => {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-
-const modal = {
-    el: document.getElementById("dice-roll-modal")
+app.updateAll = () => {
+    app.setCharacterState();
+    app.calculateAbilityModifiers();
+    app.displaySkillModifierValues();
+    app.getSkillList().forEach((skill) => {
+        app.calculateSkillTotals(skill);
+    })
 }
 
 app.init = () => {
     // Populates skills list based on app.character.skills on pageload
     // TODO: Is passing the values through as an array less performant than a for loop on the object?
-    Object.values(app.character.skills).forEach(skillObj => {
+    Object.values(app.character.skills).forEach((skillObj, index) => {
         app.createSkillItem(skillObj);
+
+        // Run mass update once skill list is generated
+        // TODO:    localStorage/sessionStorage to retain the values in skill on page reload?
+        //          Would then need to displayCharacterData from storage
+        if (index === Object.keys(app.character.skills).length - 1) {
+            app.updateAll();
+        }
     });
 
     // Events
     // TODO: Can we listen for changes in the `character` object variable instead of input events?
     //       Proxies? Promises? Thoughts and Prayers?
     $(document).on('input', 'input[data-state-map]', (e) => {
-        app.setCharacterState();
-        app.calculateAbilityModifiers();
-        app.displaySkillModifierValues();
-        app.getSkillList().forEach((skill) => {
-            app.calculateSkillTotals(skill);
-        })
+        app.updateAll();
     });
 
     $(document).on('change', 'input[data-class-skill]', (e) => {

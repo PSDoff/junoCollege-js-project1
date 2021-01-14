@@ -100,10 +100,18 @@ section {
   }
   
   .modal-header {
+    background-color: #494949;
     padding: 2px 16px;
-    background-color: #5cb85c;
     color: white;
     position: relative;
+  }
+
+  .modal-header.success {
+    background-color: #5cb85c;
+  }
+
+  .modal-header.fail {
+    background-color: #c20000;
   }
   
   .modal-body {padding: 2px 16px;}
