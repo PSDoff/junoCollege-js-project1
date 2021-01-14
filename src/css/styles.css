@@ -1,0 +1,47 @@
+label {
+    /* display: block; */
+    margin-bottom: 0;
+}
+
+input {
+    max-width: 100%;
+    width: 100%;
+}
+
+input[type="checkbox"] {
+    width: auto;
+}
+
+.ability-name {
+    background: rgba(77, 77, 77, 1);
+    color: rgba(255, 255, 255, 1);
+    font-weight: 700;
+}
+
+section {
+    margin-bottom: 4rem;
+}
+
+.headers {
+    margin-top: 4rem;
+    margin-bottom: 0;
+}
+
+.grid {
+    min-height: 0;
+}
+
+#abilities {
+    width: 30%;
+    float: left;
+}
+
+#skills {
+    width: 50%;
+    float: right;
+    min-width: 768px;
+}
+
+[data-roll-it] {
+    cursor: pointer;
+}

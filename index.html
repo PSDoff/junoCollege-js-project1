@@ -4,9 +4,288 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Partial Pathfinder Character Sheet</title>
+    <!-- This CSS is hyooge. I know. But I've been hearing a lot of good things about it. -->
+    <!-- In normal circumstances, I'd be setting up a build process with PostCSS to optimize -->
+    <!-- However, I just wanted to mess around and see what the hype was so I used the fully compiled CSS from the CDN -->
+    <!-- I can only pray the optimization gods will forgive me when my day comes -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="./src/css/styles.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="container mx-auto">
+        
+        <section id="info">
+            <div class="grid grid-cols-2 md:grid-cols-8 gap-5">
+
+                <div class="logo col-span-2">
+                    <img src="src/assets/img/pathfinder_logo.png" width="860" height="264" alt="Echoes of Europa - Homebrew Sandbox" />
+                </div>
+                <div class="col-span-2">
+                    <label for="character_name" class="uppercase font-bold text-md text-grey-darkest">Character Name</label>
+                    <input type="text" id="ch-name" class="border py-2 px-3 text-grey-darkest" name="character_name" placeholder="Moonflower Starshine"></input>
+                </div>
+                <div class="col-span-2">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Alignment</label>
+                    <input type="text" id="ch-alignment" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-2">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Player</label>
+                    <input type="text" id="ch-player" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-2">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Class</label>
+                    <input type="text" id="ch-class" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-2">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Level</label>
+                    <input type="text" id="ch-level" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-2">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Deity</label>
+                    <input type="text" id="ch-deity" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-2">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Homeland</label>
+                    <input type="text" id="ch-homeland" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-1">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Race</label>
+                    <select class="border py-2 px-3 text-grey-darkest" id="ch-race">
+                        <option value="arthurian">Arthurian</option>
+                        <option value="augment">Augment</option>
+                        <option value="baseline-human">Baseline Human</option>
+                        <option value="drakkani">Drakkani</option>
+                        <option value="fenris">Fenris</option>
+                        <option value="fragment">Fragment</option>
+                        <option value="samedian">Samedian</option>
+                        <option value="ebbrian">Ebbrian</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Size</label>
+                    <input type="text" id="ch-size" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-1">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Gender</label>
+                    <input type="text" id="ch-gender" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-1">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Age</label>
+                    <input type="text" id="ch-age" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-1">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Height</label>
+                    <input type="text" id="ch-height" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-1">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Weight</label>
+                    <input type="text" id="ch-weight" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-1">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Hair</label>
+                    <input type="text" id="ch-hair" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+                <div class="col-span-1">
+                    <label class="uppercase font-bold text-md text-grey-darkest">Eyes</label>
+                    <input type="text" id="ch-eyes" class="border py-2 px-3 text-grey-darkest"></input>
+                </div>
+            </div>
+        </section>
+        <section id="abilities">
+            <div class="grid grid-cols-5 gap-5 col-span-1">
+                <!-- BEGIN Ability rows: Header -->
+                <div class="col-span-2 text-center italic">
+                    <span>Ability Name</span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span>Score</span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span>Modifier</span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span>Temp</span>
+                </div>
+                <!-- END Ability rows: Header -->
+                <!-- BEGIN Ability rows: Items, STR -->
+                <div class="col-span-2" id="ability-str">
+                    <div class="ability-name text-center" data-roll-it>
+                        <div class="ability-name-short">STR</div>
+                        <div class="ability-name-long">Strength</div>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-score">
+                        <input type="text" data-ability-name="str" data-state-map="character.abilities.str.score" class="ability-input ability-score-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-mod">
+                        <input type="text" data-ability-name="str" data-ability-mod="str" data-state-map="character.abilities.str.mod" class="ability-input ability-mod-input border py-2 px-3 text-grey-darkest"  disabled></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-temp">
+                        <input type="text" data-ability-name="str" data-state-map="character.abilities.str.temp" class="ability-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <!-- BEGIN Ability rows: Items, STR -->
+                <!-- BEGIN Ability rows: Items, DEX -->
+                <div class="col-span-2" id="ability-dex">
+                    <div class="ability-name text-center" data-roll-it>
+                        <div class="ability-name-short">DEX</div>
+                        <div class="ability-name-long">Dexterity</div>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-score">
+                        <input type="text" data-ability-name="dex" data-state-map="character.abilities.dex.score" class="ability-input ability-score-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-mod">
+                        <input type="text" data-ability-name="dex" data-ability-mod="dex" data-state-map="character.abilities.dex.mod" class="ability-input ability-mod-input border py-2 px-3 text-grey-darkest" disabled></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-temp">
+                        <input type="text" data-ability-name="dex" data-state-map="character.abilities.dex.temp" class="ability-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <!-- BEGIN Ability rows: Items, DEX -->
+                <!-- BEGIN Ability rows: Items, CON -->
+                <div class="col-span-2" id="ability-con">
+                    <div class="ability-name text-center" data-roll-it>
+                        <div class="ability-name-short">CON</div>
+                        <div class="ability-name-long">Constitution</div>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-score">
+                        <input type="text" data-ability-name="con" data-state-map="character.abilities.con.score" class="ability-input ability-score-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-mod">
+                        <input type="text" data-ability-name="con" data-ability-mod="con" data-state-map="character.abilities.con.mod" class="ability-input ability-mod-input border py-2 px-3 text-grey-darkest" disabled></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-temp">
+                        <input type="text" data-ability-name="con" data-state-map="character.abilities.con.temp" class="ability-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <!-- BEGIN Ability rows: Items, CON -->
+                <!-- BEGIN Ability rows: Items, INT -->
+                <div class="col-span-2" id="ability-int">
+                    <div class="ability-name text-center" data-roll-it>
+                        <div class="ability-name-short">INT</div>
+                        <div class="ability-name-long">Intelligence</div>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-score">
+                        <input type="text" data-ability-name="int" data-state-map="character.abilities.int.score" class="ability-input ability-score-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-mod">
+                        <input type="text" data-ability-name="int" data-ability-mod="int" data-state-map="character.abilities.int.mod" class="ability-input ability-mod-input border py-2 px-3 text-grey-darkest" disabled></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-temp">
+                        <input type="text" data-ability-name="int" data-state-map="character.abilities.int.temp" class="ability-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <!-- BEGIN Ability rows: Items, INT -->
+                <!-- BEGIN Ability rows: Items, WIS -->
+                <div class="col-span-2" id="ability-wis">
+                    <div class="ability-name text-center" data-roll-it>
+                        <div class="ability-name-short">WIS</div>
+                        <div class="ability-name-long">Wisdom</div>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-score">
+                        <input type="text" data-ability-name="wis" data-state-map="character.abilities.wis.score" class="ability-input ability-score-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-mod">
+                        <input type="text" data-ability-name="wis" data-ability-mod="wis" data-state-map="character.abilities.wis.mod" class="ability-input ability-mod-input border py-2 px-3 text-grey-darkest" disabled></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-temp">
+                        <input type="text" data-ability-name="wis" data-state-map="character.abilities.wis.temp" class="ability-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <!-- BEGIN Ability rows: Items, WIS -->
+                <!-- BEGIN Ability rows: Items, CHA -->
+                <div class="col-span-2" id="ability-chr">
+                    <div class="ability-name text-center" data-roll-it>
+                        <div class="ability-name-short">CHA</div>
+                        <div class="ability-name-long">Charisma</div>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-score">
+                        <input type="text" data-ability-name="cha" data-state-map="character.abilities.cha.score" class="ability-input ability-score-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-mod">
+                        <input type="text" data-ability-name="cha" data-ability-mod="cha" data-state-map="character.abilities.cha.mod" class="ability-input ability-mod-input border py-2 px-3 text-grey-darkest" disabled></input>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="ability-temp">
+                        <input type="text" data-ability-name="cha" data-state-map="character.abilities.cha.temp" class="ability-input border py-2 px-3 text-grey-darkest"></input>
+                    </div>
+                </div>
+                <!-- BEGIN Ability rows: Items, CHA -->
+            </div>
+        </section>
+        <section id="skills">
+            <div class="grid grid-cols-11 gap-5 col-span-3">
+                <!-- BEGIN Skills rows: Header -->
+                <div class="col-span-2 text-left italic">
+                    <span>Skill Name</span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span>Total</span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span></span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span>Ability</span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span></span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span>Ranks</span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span></span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span>Misc</span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span></span>
+                </div>
+                <div class="col-span-1 text-center italic">
+                    <span>Temp</span>
+                </div>
+                <!-- END Skills rows: Header -->
+            </div>
+        </section>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="src/js/script.js"></script>
 </body>
 </html>
