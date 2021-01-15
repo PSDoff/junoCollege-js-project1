@@ -331,6 +331,7 @@ app.setClassSkills = (classSkillId, isChecked) => {
     }
 }
 
+
 // TODO: Apply checked/unchecked to skills list for class skills
 app.displayClassSkills = () => {
     const skillList = app.getSkillList();
