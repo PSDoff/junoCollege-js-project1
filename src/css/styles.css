@@ -18,6 +18,10 @@ input[type="checkbox"] {
     font-weight: 700;
 }
 
+.container {
+  padding: 0 50px;
+}
+
 section {
     margin-bottom: 4rem;
 }
@@ -32,14 +36,25 @@ section {
 }
 
 #abilities {
-    width: 30%;
-    float: left;
+    width: 100%;
 }
 
 #skills {
+    width: 100%;
+    min-width: 768px;
+}
+
+@media only screen and (min-width: 1270px) {
+  #skills {
     width: 50%;
     float: right;
     min-width: 768px;
+  }
+
+  #abilities {
+    width: 30%;
+    float: left;
+  }
 }
 
 [data-roll-it] {
@@ -114,7 +129,7 @@ section {
     background-color: #c20000;
   }
   
-  .modal-body {padding: 2px 16px;}
+  .modal-body {padding: 20px 15px;}
   
   .modal-footer {
     padding: 2px 16px;
@@ -141,4 +156,30 @@ section {
   @keyframes fadeIn {
     from {opacity: 0} 
     to {opacity: 1}
+  }
+
+  /* Juno Shoutout */
+  .created-at {
+    height: 50px;
+    position: fixed;
+    background:#ea593e;
+    transform: rotate(90deg);
+    /* Offset position due to rotation */
+    left: -101px;
+    top: 160px;
+  }
+
+  .created-at .inner-wrapper {
+    padding: 13px 20px;
+  }
+
+  .created-at span {
+    float: left;
+    margin-right: 15px;
+    color: #ffffff;
+  }
+
+  .created-at img {
+    max-width: 120px;
+    float: left;
   }

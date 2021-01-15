@@ -3,47 +3,33 @@ const modal = {
     el: document.getElementById("dice-roll-modal")
 }
 
+// TODO:    Spend the rest of my life using Postman to create a Pathfinder API
+//          It'll be worth it, I swear upon my life, Future Alex.
+
 // I recommend collapsing this object
 // No really. You just like... keep scrolling...
 // For quite some time.
 // Do I even need all of this initialized right at the start? I dunno.
+// UPDATE: Removed initial values of ability scores and skills. Update methods should default naturally
 app.character = {
     abilities: {
         str: {
-            displayName: 'Strength',
-            score: 10,
-            mod: 0,
-            temp: 0
+            displayName: 'Strength'
         },
         dex: {
-            displayName: 'Dexterity',
-            score: 10,
-            mod: 0,
-            temp: 0
+            displayName: 'Dexterity'
         },
         con: {
-            displayName: 'Constitution',
-            score: 10,
-            mod: 0,
-            temp: 0
+            displayName: 'Constitution'
         },
         int: {
-            displayName: 'Intelligence',
-            score: 10,
-            mod: 0,
-            temp: 0
+            displayName: 'Intelligence'
         },
         wis: {
-            displayName: 'Wisdom',
-            score: 10,
-            mod: 0,
-            temp: 0
+            displayName: 'Wisdom'
         },
         cha: {
-            displayName: 'Charisma',
-            score: 10,
-            mod: 0,
-            temp: 0
+            displayName: 'Charisma'
         }
     },
     skills: {
@@ -65,7 +51,7 @@ app.character = {
         "climb": {
             displayName: 'Climb',
             modStat: 'str',
-            isClassSkill: false
+            isClassSkill: true
         }, 
         "craft": {
             displayName: 'Craft',
@@ -80,7 +66,7 @@ app.character = {
         "disable_device": {
             displayName: 'Disable Device',
             modStat: 'dex',
-            isClassSkill: false
+            isClassSkill: true
         }, 
         // Don't say I didn't warn you
         "disguise": {
@@ -106,7 +92,7 @@ app.character = {
         "heal": {
             displayName: 'Heal',
             modStat: 'wis',
-            isClassSkill: false
+            isClassSkill: true
         }, 
         "intimidate": {
             displayName: 'Intimidate',
@@ -126,7 +112,7 @@ app.character = {
         "knowledge_engineering": {
             displayName: 'Knowledge (Engineering)',
             modStat: 'int',
-            isClassSkill: false
+            isClassSkill: true
         }, 
         "knowledge_geography": {
             displayName: 'Knowledge (Geography)',
@@ -233,6 +219,78 @@ app.character = {
     }
 }
 
+app.pfData = {
+    // TODO:    Include all racial modifiers (class skills additions, feats, etc). Starts with Ability mods.
+    races: {
+        arthurian: {
+            // TODO:    include gender variants
+            //          The below applies to "Female" variant
+            //          http://www.echoesofeuropa.wiki/en/Races/Arthurian
+            abilityMods: {
+                dex: 2,
+                wis: 2,
+                str: -2
+            }
+        },
+        augment: {
+            // TODO:    include "genetic predisposition" variants
+            //          The below applies to "Pilot" variant
+            //          http://www.echoesofeuropa.wiki/en/Races/Augments
+            abilityMods: {
+                dex: 2,
+                str: -2
+            }
+        },
+        'baseline-human': {
+            // TODO:    Baseline humans get to choose a +2 to any Ability. 
+            //          Add functionality to allow for this player choice
+            //          Defaults as 'cha' in the meantime
+            //          http://www.echoesofeuropa.wiki/en/Races/baseline-human
+            abilityMods: {
+                cha: 2
+            }
+        },
+        drakkani: {
+            abilityMods: {
+                dex: 2,
+                con: 2,
+                char: -2
+            },
+            classSkills: ['perception', 'stealth']
+        }, 
+        fenris: {
+            abilityMods: {
+                str: 2,
+                wis: 2,
+                int: -2
+            }
+        },
+        fragment: {
+            abilityMods: {
+                int: 2,
+                dex: 2,
+                con: -2
+            }
+        },
+        samedian: {
+            abilityMods: {
+                str: 2,
+                cha: 2,
+                wis: -2
+            }
+        },
+        ebbrian: {
+            // TODO:    Functionality to choose any two Abilities to add +2
+            //          Default with `dex` and `wis`
+            //          http://www.echoesofeuropa.wiki/en/Races/the-ebbrian-collective
+            abilityMods: {
+                dex: 2,
+                wis: 2
+            }
+        }
+    }
+}
+
 app.getSkillList = () => {
     return Object.keys(app.character.skills);
 }
@@ -273,8 +331,23 @@ app.setClassSkills = (classSkillId, isChecked) => {
     }
 }
 
+// TODO: Apply checked/unchecked to skills list for class skills
+app.displayClassSkills = () => {
+    const skillList = app.getSkillList();
+    
+    skillList.forEach(skillId => {
+        if (app.character.skills[skillId].isClassSkill) {
+            $(`input[type=checkbox][name="class-skill-${skillId}]`).attr('checked', true);
+        } else {
+            $(`input[type=checkbox][name="class-skill-${skillId}]`).attr('checked', false);
+        }
+    });
+}
+
 // TODO: Recreate the entirety of React inside this project so I can haz state management
 // I dream of ~~genie~~ data binding
+// ALT TODO: https://v3.vuejs.org/api/basic-reactivity.html#reactive <------- !!!!!!!
+// Could use this small component of Vue to emulate state management with the `character` object <------- !!!!!!!
 app.setCharacterState = () => {
     // TODO: Some way to cleanup/specify what gets stored in the array? Performance concerns :|
     // Filter. Map.
@@ -311,7 +384,7 @@ app.createSkillItem = (skillObj) => {
     const skillId = skillObj.displayName.replace(/\s+/g, '_').replace(/[{()}]/g, '').toLowerCase();
     const skillItemTemplate = `
         <div class="col-span-2 text-left">
-            <input type="checkbox" data-class-skill="${skillId}" name="skill-${skillId}" />
+            <input type="checkbox" data-class-skill="${skillId}" name="class-skill-${skillId}" ${skillObj.isClassSkill ? 'checked' : ''} />
             <label for="skill-${skillId}" data-roll-it="skill" data-skill-id="${skillId}">${skillObj.displayName}</label>
         </div>
         <div class="col-span-1 text-center">
@@ -535,9 +608,11 @@ app.init = () => {
 
     $(document).on('click', '.close', () => {
         modal.el.style.display = "none";
-    })
+    });
+
 }
 
 $(function(){
     app.init();
+    app.displayClassSkills(app.character.skills);
 });
